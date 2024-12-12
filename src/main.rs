@@ -2,6 +2,7 @@ use std::path::Path;
 
 use clap::Command;
 
+mod cargo_checker;
 mod npm_checker;
 mod project_detector;
 
@@ -15,6 +16,11 @@ fn main() {
 
     if project_detector::is_npm_project(current_dir) {
         match npm_checker::check_updates(current_dir) {
+            Ok(result) => println!("{}", result),
+            Err(e) => eprintln!("Error: {}", e),
+        }
+    } else if project_detector::is_cargo_project(current_dir) {
+        match cargo_checker::check_updates(current_dir) {
             Ok(result) => println!("{}", result),
             Err(e) => eprintln!("Error: {}", e),
         }
